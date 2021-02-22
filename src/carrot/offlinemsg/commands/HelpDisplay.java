@@ -5,8 +5,6 @@ import carrot.offlinemsg.logs.ChatLogger;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.util.Map;
-
 public final class HelpDisplay {
     public static ChatLogger logger;
 

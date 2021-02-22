@@ -1,7 +1,5 @@
 package carrot.offlinemsg.players;
 
-import java.util.ArrayList;
-
 public class PlayerMessage {
     private String sender;
     private String target;

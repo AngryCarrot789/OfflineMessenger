@@ -56,7 +56,7 @@ public final class ArgumentsParser {
         if (fullArgs == null || fullArgs.length <= 0){
             return new ArrayList<String>();
         }
-        ArrayList<String> args = new ArrayList(Arrays.asList(fullArgs));
+        ArrayList<String> args = new ArrayList<String>(Arrays.asList(fullArgs));
         args.remove(0);
         return args;
     }
