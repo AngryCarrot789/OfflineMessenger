@@ -5,9 +5,9 @@ import java.util.ArrayList;
 public class PlayerMessage {
     private String sender;
     private String target;
-    private ArrayList<String> messages;
+    private String messages;
 
-    public PlayerMessage(String sender, String target, ArrayList<String> messages) {
+    public PlayerMessage(String sender, String target, String messages) {
         this.sender = sender;
         this.target = target;
         this.messages = messages;
@@ -16,26 +16,15 @@ public class PlayerMessage {
     public PlayerMessage(String sender, String target) {
         this.sender = sender;
         this.target = target;
-        this.messages = new ArrayList<String>(1);
+        this.messages = "";
     }
 
-    public void AddLine(String message){
-        this.messages.add(message);
+    public String getMessages() {
+        return this.messages;
     }
 
-    public boolean RemoveLine(int line){
-        if (line > 0) {
-            return RemoveIndex(line - 1);
-        }
-        return false;
-    }
-
-    public boolean RemoveIndex(int index) {
-        if (index >= this.messages.size()) {
-            this.messages.remove(index);
-            return true;
-        }
-        return false;
+    public void setMessages(String messages) {
+        this.messages = messages;
     }
 
     public String getSender() {
@@ -46,28 +35,23 @@ public class PlayerMessage {
         return this.target;
     }
 
-    public void setSender(String sender){
+    public void setSender(String sender) {
         this.sender = sender;
     }
 
-    public void setTarget(String target){
+    public void setTarget(String target) {
         this.target = target;
-    }
-
-    public ArrayList<String> getMessages() {
-        return this.messages;
     }
 
     @Override
     public int hashCode() {
-        return sender.hashCode() + target.hashCode() + messages.hashCode();
+        return sender.hashCode() + target.hashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
         PlayerMessage message = (PlayerMessage) obj;
         return message.sender.equals(sender) &&
-                message.target.equals(target) &&
-                message.messages.equals(messages);
+                message.target.equals(target);
     }
 }

@@ -4,6 +4,8 @@ import carrot.offlinemsg.OfflineMessenger;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
+
 /**
  * A class for sending delayed messages to a player
  */
@@ -40,5 +42,9 @@ public class ChatMessageDelayer {
             }
         };
         delayedMessage.runTaskLater(OfflineMessenger.getInstance(), delayedTicks);
+    }
+
+    public static void SendDelayedMessages(final Player player, final ArrayList<String> messages, long delayedTicks) {
+        SendDelayedMessages(player, messages.toArray(new String[0]), delayedTicks);
     }
 }

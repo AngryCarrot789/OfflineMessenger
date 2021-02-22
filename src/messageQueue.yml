@@ -1,5 +1,6 @@
 # Stores all the messages that are to be sent
 
-TheRareCarrot:
-  - 'YourMum69420'
-  - 'stop it ok xddddd'
+queued:
+  TheRareCarrot:
+    YourMum420: 'h'
+    JoeSpec: 'h'

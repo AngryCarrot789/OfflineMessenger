@@ -40,6 +40,6 @@ public class ChatLogger {
     }
 
     public static void LogPlugin(String text){
-        LogConsole(OfflineMessenger.PREFIX + " " + text);
+        LogConsole(OfflineMessenger.PREFIX + " " + ChatColor.GOLD + text);
     }
 }

@@ -3,7 +3,6 @@ package carrot.offlinemsg.commands;
 import carrot.offlinemsg.OfflineMessenger;
 import carrot.offlinemsg.PermissionsHelper;
 import carrot.offlinemsg.logs.ChatLogger;
-import carrot.offlinemsg.players.MessageParser;
 import carrot.offlinemsg.players.MessageQueueManager;
 import carrot.offlinemsg.players.PlayerMessage;
 import org.bukkit.ChatColor;
@@ -12,11 +11,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.io.CharConversionException;
 import java.util.ArrayList;
 
 public class OfflineMessengerCommandHandler implements CommandExecutor {
-    private ChatLogger logger = new ChatLogger(null);
+    private final ChatLogger logger = new ChatLogger(null);
     public boolean Check(String checkEqual, String toThis) {
         return checkEqual.equalsIgnoreCase(toThis);
     }
@@ -31,27 +29,24 @@ public class OfflineMessengerCommandHandler implements CommandExecutor {
         }
 
         if (Check("help", command)) {
-            ParsedValue<Integer> parsedPage = ArgumentsParser.ParseInteger(args, 0);
-            int page = 0;
-            if (!parsedPage.failed()) {
-                page = parsedPage.getValue();
-            }
             if (isPlayer) {
-                HelpDisplay.DisplayHelp(playerSender, page, false);
+                HelpDisplay.DisplayHelp(playerSender, false);
             }
             else {
-                HelpDisplay.DisplayHelp(null, page, true);
+                HelpDisplay.DisplayHelp(null, true);
             }
         }
         else if (Check("clear", command)) {
             if (isPlayer) {
-                if (PermissionsHelper.HasPermission(playerSender, "om.clearPlayer")) {
+                if (PermissionsHelper.HasPermissionOrOp(playerSender, "om.clearPlayer")) {
                     ParsedValue<String> player = ArgumentsParser.ParseString(args, 0);
                     if (player.failed()) {
-                        logger.LogAny(ChatColor.RED + "Error with the player name");
+                        MessageQueueManager.RemoveTarget(playerSender.getName());
+                        logger.LogAny(ChatColor.GREEN + "Cleared your messages!");
                         return;
                     }
                     MessageQueueManager.RemoveTarget(player.getValue());
+                    logger.LogAny(ChatColor.GREEN + "Cleared their messages!");
                 }
                 else {
                     MessageQueueManager.RemoveTarget(playerSender.getName());
@@ -68,37 +63,50 @@ public class OfflineMessengerCommandHandler implements CommandExecutor {
                 logger.LogAny(ChatColor.GOLD + "Cleared " + ChatColor.GREEN + player.getValue() + ChatColor.GOLD + " messages!");
             }
         }
-        else if (Check("add", command)) {
+        else if (Check("send", command)) {
             if (isPlayer) {
-                if (!PermissionsHelper.HasPermission(playerSender, "om.add")) {
+                if (!PermissionsHelper.HasPermissionOrOp(playerSender, "om.send")) {
                     logger.LogAny(ChatColor.RED + "You dont have permission for this command");
                     return;
                 }
             }
-            ParsedValue<String> player = ArgumentsParser.ParseString(args, 0);
-            ParsedValue<String> message = ArgumentsParser.ParseString(args, 1);
-            if (player.failed()) {
+            ParsedValue<String> parsedPlayer = ArgumentsParser.ParseString(args, 0);
+            ParsedValue<String> parsedMessage = ArgumentsParser.ParseString(args, 1);
+            if (parsedPlayer.failed()) {
                 logger.LogAny("Error with the player's name");
                 return;
             }
-            if (message.failed()) {
+            if (parsedMessage.failed()) {
                 logger.LogAny("Error with the message to be queued");
                 return;
             }
-            PlayerMessage existingMessage = MessageQueueManager.GetQueuedMessage(player.getValue());
-            if (existingMessage == null) {
-                PlayerMessage playerMessage = new PlayerMessage(sender.getName(), player.getValue());
-                String msg = ChatColor.translateAlternateColorCodes('&', message.getValue());
-                msg = msg.replace('_', ' ');
-                playerMessage.AddLine(sender.getName());
-                playerMessage.AddLine(msg);
-                logger.LogAny(ChatColor.GOLD + "Added: " + ChatColor.RESET + msg);
-                MessageQueueManager.AddMessage(player.getValue(), playerMessage);
+            PlayerMessage existingMessage = null;
+            ArrayList<PlayerMessage> messages = MessageQueueManager.GetQueuedMessages(parsedPlayer.getValue());
+            if (messages == null) {
+                PlayerMessage message = new PlayerMessage(sender.getName(), parsedPlayer.getValue(), parsedMessage.getValue());
+                MessageQueueManager.AddMessagesToQueuedAndConfig(parsedPlayer.getValue(), message);
+                logger.LogAny(ChatColor.GOLD + "Added: " + ChatColor.RESET + message.getMessages());
+                OfflineMessenger.getInstance().SaveMessageQueueConfig();
+                return;
             }
-            else{
-                String msg = ChatColor.translateAlternateColorCodes('&', message.getValue());
+            for (int i = 0; i < messages.size(); i++) {
+                PlayerMessage message = messages.get(i);
+                if (message.getSender().equals(sender.getName())) {
+                    existingMessage = message;
+                    break;
+                }
+            }
+            if (existingMessage == null) {
+                PlayerMessage message = new PlayerMessage(sender.getName(), parsedPlayer.getValue(), parsedMessage.getValue());
+                MessageQueueManager.AddMessagesToQueuedAndConfig(parsedPlayer.getValue(), message);
+                logger.LogAny(ChatColor.GOLD + "Added: " + ChatColor.RESET + message.getMessages());
+                OfflineMessenger.getInstance().SaveMessageQueueConfig();
+            }
+            else {
+                String msg = ChatColor.translateAlternateColorCodes('&', parsedMessage.getValue());
                 msg = msg.replace('_', ' ');
-                existingMessage.AddLine(msg);
+                existingMessage.setMessages(msg);
+                MessageQueueManager.UpdateExistingMessageInConfig(existingMessage);
                 logger.LogAny(ChatColor.GOLD + "Added: " + ChatColor.RESET + msg);
                 OfflineMessenger.getInstance().SaveMessageQueueConfig();
             }
@@ -110,27 +118,27 @@ public class OfflineMessengerCommandHandler implements CommandExecutor {
                     return;
                 }
             }
-            ParsedValue<String> player = ArgumentsParser.ParseString(args, 0);
-            ParsedValue<Integer> line = ArgumentsParser.ParseInteger(args, 1);
-            if (player.failed()) {
+            ParsedValue<String> parsedPlayer = ArgumentsParser.ParseString(args, 0);
+            if (parsedPlayer.failed()) {
                 logger.LogAny("Error with the player's name");
                 return;
             }
-            if (line.failed()) {
-                logger.LogAny("Error with the line number to be removed from a players queued message");
-                return;
-            }
 
-            PlayerMessage message = MessageQueueManager.GetQueuedMessage(player.getValue());
-            if (message == null) {
-                logger.LogAny(ChatColor.GOLD + "That player doesn't have any queued messages");
-                return;
+            PlayerMessage existingMessage = null;
+            ArrayList<PlayerMessage> messages = MessageQueueManager.GetQueuedMessages(parsedPlayer.getValue());
+            for (int i = 0; i < messages.size(); i++) {
+                PlayerMessage message = messages.get(i);
+                if (message.getSender().equals(sender.getName())) {
+                    existingMessage = message;
+                    break;
+                }
             }
-            if (message.RemoveLine(line.getValue())) {
-                logger.LogAny(ChatColor.GREEN + "Removed line " + line.getValue());
+            if (existingMessage == null) {
+                logger.LogAny(ChatColor.GOLD + "That player has no pending messages!");
             }
             else {
-                logger.LogAny(ChatColor.GOLD + "Failed to remove line " + line.getValue());
+                MessageQueueManager.RemoveMessage(existingMessage.getTarget(), existingMessage.getSender());
+                logger.LogAny(ChatColor.GOLD + "Removed that message!");
             }
         }
         else if (Check("show", command)) {
@@ -146,16 +154,29 @@ public class OfflineMessengerCommandHandler implements CommandExecutor {
                 return;
             }
             logger.LogAny(ChatColor.GOLD + "Displaying the queued messages for " + ChatColor.GREEN + player.getValue());
-            PlayerMessage playerMessage = MessageQueueManager.GetQueuedMessage(player.getValue());
-            if (playerMessage != null) {
-                ArrayList<String> messages = playerMessage.getMessages();
-                for (int i = 1; i < messages.size(); i++) {
-                    String line = messages.get(i);
-                    sender.sendMessage(i + ": " + line);
+            ArrayList<PlayerMessage> messages = MessageQueueManager.GetQueuedMessages(player.getValue());
+            if (messages == null || messages.size() < 1) {
+                logger.LogAny(ChatColor.RED + "There are no queued messages for that player");
+            }
+            else {
+                for (PlayerMessage message : messages) {
+                    sender.sendMessage(ChatColor.GOLD + "From " + ChatColor.GREEN + message.getSender() + ": " + ChatColor.RESET + message.getMessages());
                 }
             }
-            else{
-                logger.LogAny(ChatColor.RED + "There are no queued messages for that player");
+        }
+        else if (Check("reload", command)) {
+            if (isPlayer) {
+                if (PermissionsHelper.HasPermission(playerSender, "om.reload")) {
+                    OfflineMessenger.getInstance().ReloadAllConfigs();
+                    logger.LogAny(ChatColor.RED + "Config Reloaded!");
+                }
+                else {
+                    logger.LogAny(ChatColor.RED + "You dont have permission for this command");
+                }
+            }
+            else {
+                OfflineMessenger.getInstance().ReloadAllConfigs();
+                logger.LogAny(ChatColor.RED + "Config Reloaded!");
             }
         }
         else {
@@ -166,6 +187,10 @@ public class OfflineMessengerCommandHandler implements CommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command cmd, String s, String[] strings) {
         String command = ArgumentsParser.GetCommand(strings);
         ArrayList<String> args = ArgumentsParser.GetCommandArgs(strings);
+        if (commandSender == null){
+            ChatLogger.LogPlugin("Error in Command Handler: Sender was null");
+            return true;
+        }
         logger.setSender(commandSender);
         if (strings.length == 0){
             logger.LogAny(ChatColor.GREEN + "------ " + ChatColor.GRAY + "OfflineMessenger" + ChatColor.GREEN + " ------");
