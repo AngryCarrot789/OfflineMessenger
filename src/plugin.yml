@@ -1,15 +1,15 @@
 name: OfflineMessenger
 main: carrot.offlinemsg.OfflineMessenger
-version: 1.0
+version: 1.2.173
 description: A plugin for sending messages to players when they join. Mail v2
 
 permissions:
   om.clearPlayer:
-    description: Clear a players messages
-  om.add:
-    description: Add/Send messages to a player next time they join
-  om.remove:
-    description: Remove/Delete messages queued for a player
+    description: Clear a player's messages
+  om.sendPlayer:
+    description: Send messages to a player next time they join
+  om.showPlayer:
+    description: Show the queued messages of other players
 
 commands:
   offlinemessenger:

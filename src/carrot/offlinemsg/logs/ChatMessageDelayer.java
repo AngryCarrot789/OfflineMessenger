@@ -1,6 +1,8 @@
 package carrot.offlinemsg.logs;
 
 import carrot.offlinemsg.OfflineMessenger;
+import carrot.offlinemsg.players.PlayerMessage;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -18,6 +20,15 @@ public class ChatMessageDelayer {
             }
         };
         delayedMessage.runTaskLater(OfflineMessenger.getInstance(), delayedTicks);
+    }
+
+    public static void SendDelayedMessage(final Player player, final PlayerMessage message, long delayedTicks) {
+        ArrayList<String> playerMessages = new ArrayList<String>();
+        playerMessages.add("§6-------------- §3You have a new message! §6--------------§r");
+        playerMessages.add("§3" + "From §9" + message.getSender() + ": ");
+        playerMessages.add("  " + ChatColor.translateAlternateColorCodes('&', message.getMessage()));
+        playerMessages.add("§6---- §3Do §7/om clear §3to delete all your messages! §6----§r");
+        ChatMessageDelayer.SendDelayedMessages(player, playerMessages, delayedTicks);
     }
 
     public static void SendDelayedMessages(final Player player, final String[] messages, long delayedTicks) {

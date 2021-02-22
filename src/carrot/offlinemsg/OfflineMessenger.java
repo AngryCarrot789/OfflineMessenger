@@ -14,6 +14,7 @@ public class OfflineMessenger extends JavaPlugin {
     public Config mainConfig;
     public ChatLogger logger;
     public PlayerJoinListener playerJoinListener;
+    public static int LoginSendQueuedMessageDelayTicks = 100;
 
     public static final String PREFIX = "§6[§7OfflineMessenger§6]§r";
 
@@ -22,7 +23,7 @@ public class OfflineMessenger extends JavaPlugin {
         logger = new ChatLogger(null);
         ChatLogger.LogPlugin("Enabling plugin...");
 
-        ReloadAllConfigs();
+        ReloadAllConfigs(true);
 
         ChatLogger.LogPlugin("Initialising player join listener...");
         playerJoinListener = new PlayerJoinListener(this);
@@ -41,11 +42,11 @@ public class OfflineMessenger extends JavaPlugin {
         ChatLogger.LogPlugin("Disabled :((");
     }
 
-    public void ReloadAllConfigs(){
+    public void ReloadAllConfigs(boolean isStartup) {
         ReloadMainConfig();
         ReloadMessageQueueConfig();
         ChatLogger.LogPlugin("Initialising message queue...");
-        MessageQueueManager.Initialise();
+        MessageQueueManager.Initialise(isStartup);
         ChatLogger.LogPlugin("Success!");
     }
 
@@ -84,6 +85,7 @@ public class OfflineMessenger extends JavaPlugin {
     private boolean TryLoadMainConfig() {
         try {
             mainConfig = new Config(this, "config.yml");
+            LoginSendQueuedMessageDelayTicks = mainConfig.getInt("loginSendQueuedMessageDelayTicks");
             return true;
         }
         catch (Exception e) {

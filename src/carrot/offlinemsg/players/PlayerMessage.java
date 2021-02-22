@@ -19,11 +19,11 @@ public class PlayerMessage {
         this.messages = "";
     }
 
-    public String getMessages() {
+    public String getMessage() {
         return this.messages;
     }
 
-    public void setMessages(String messages) {
+    public void setMessage(String messages) {
         this.messages = messages;
     }
 

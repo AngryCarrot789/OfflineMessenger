@@ -37,20 +37,26 @@ public final class HelpDisplay {
         LogTtl("-----------< OfflineMessenger Help Page 1 >-----------");
         LogCMD("/om", "The main command");
         LogCMD("/om help", "Displays commands for OfflineMessenger");
+        if (ignorePermissions || PermissionsHelper.HasPermission(player, "om.showPlayer")) {
+            LogCMD("/om show [player]", "Shows your (or a players) messages");
+        }
+        else {
+            LogCMD("/om show", "Shows all the messages for you");
+        }
+        if (ignorePermissions || PermissionsHelper.HasPermission(player, "om.sendPlayer")) {
+            LogCMD("/om send <player> <msg>", "Queues 1 message for a player");
+            LogRaw(ChatColor.YELLOW + "(supports colours, using the & character)");
+            LogRaw(ChatColor.YELLOW + "(Use underscores not of spaces, like_this_ok)");
+            LogRaw(ChatColor.RED + "(you can only send 1 message per sender, sending another will override your old one!)");
+        }
         if (ignorePermissions || PermissionsHelper.HasPermission(player, "om.clearPlayer")) {
-            LogCMD("/om clear <player>", "Clears all your messages, or for a given player");
+            LogCMD("/om clear [player]", "Clears your (or a players) messages");
         }
         else {
             LogCMD("/om clear", "Clears all your messages");
         }
-        if (ignorePermissions || PermissionsHelper.HasPermission(player, "om.show")) {
-            LogCMD("/om show <player>", "Shows all the messages for a player");
-        }
-        if (ignorePermissions || PermissionsHelper.HasPermission(player, "om.add")) {
-            LogCMD("/om add <player> <msg>", "Queues a single line message for a player");
-        }
-        if (ignorePermissions || PermissionsHelper.HasPermission(player, "om.remove")) {
-            LogCMD("/om remove <player> <lineNumber>", "Removes a line from a player");
+        if (ignorePermissions || PermissionsHelper.HasPermission(player, "om.reload")) {
+            LogCMD("/om reload", "Re-load all messages from the config");
         }
         LogTtl("--------------------------------------------------------");
     }

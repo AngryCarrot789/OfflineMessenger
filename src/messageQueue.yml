@@ -1,6 +1,8 @@
-# Stores all the messages that are to be sent
+# Stores all the messages that haven't been cleared and/or are queued to be sent
 
 queued:
   TheRareCarrot:
-    YourMum420: 'h'
-    JoeSpec: 'h'
+    Someone: '&7stop crashing the &4server!!'
+    Me: 'e'
+  Google:
+    TestPerson: '&4no ok'

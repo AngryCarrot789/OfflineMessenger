@@ -1,1 +1,3 @@
-messageQueueAutosaveTicks: 1200
+# how long to wait (in ticks) to send a queued message after someone joins
+# useful because of all the extra messages that pop up after joining
+loginSendQueuedMessageDelayTicks: 100
