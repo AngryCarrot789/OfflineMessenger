@@ -5,6 +5,8 @@ import carrot.offlinemsg.config.Config;
 import carrot.offlinemsg.listeners.PlayerJoinListener;
 import carrot.offlinemsg.logs.ChatLogger;
 import carrot.offlinemsg.players.MessageQueueManager;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class OfflineMessenger extends JavaPlugin {
@@ -19,6 +21,14 @@ public class OfflineMessenger extends JavaPlugin {
     public static final String PREFIX = "§6[§7OfflineMessenger§6]§r";
 
     public void onEnable() {
+        if (Bukkit.getPluginManager().getPlugin("PermissionsEx") == null) {
+            ChatLogger.LogPlugin("PermissionsEx is not avaliable. Cannot enable OfflineMessenger");
+            this.setEnabled(false);
+            return;
+        }
+        else {
+            ChatLogger.LogPlugin("PermissionsEx Avaliable!");
+        }
         instance = this;
         logger = new ChatLogger(null);
         ChatLogger.LogPlugin("Enabling plugin...");
@@ -33,13 +43,19 @@ public class OfflineMessenger extends JavaPlugin {
         this.getCommand("offlinemessenger").setExecutor(new OfflineMessengerCommandHandler());
         ChatLogger.LogPlugin("Success!");
 
-        ChatLogger.LogPlugin("Enabled :))");
+        ChatLogger.LogPlugin("Enabled OfflineMessenger :)");
     }
 
     public void onDisable() {
-        SaveMessageQueueConfig();
-        SaveMainConfig();
-        ChatLogger.LogPlugin("Disabled :((");
+        if (this.isEnabled()) {
+            ChatLogger.LogPlugin("Saving configs... :(");
+            SaveMessageQueueConfig();
+            SaveMainConfig();
+            ChatLogger.LogPlugin("Disabled OfflineMessenger :(");
+        }
+        else {
+            ChatLogger.LogPlugin("Disabled OfflineMessenger after issues occoured in " + ChatColor.GREEN + "onEnable()");
+        }
     }
 
     public void ReloadAllConfigs(boolean isStartup) {
