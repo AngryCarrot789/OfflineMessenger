@@ -1,6 +1,6 @@
-package carrot.offlinemsg.logs;
+package reghzy.offlinemsg.logs;
 
-import carrot.offlinemsg.OfflineMessenger;
+import reghzy.offlinemsg.OfflineMessenger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

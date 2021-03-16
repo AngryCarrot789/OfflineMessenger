@@ -1,4 +1,4 @@
-package carrot.offlinemsg.players;
+package reghzy.offlinemsg.players;
 
 public class PlayerMessage {
     private String sender;

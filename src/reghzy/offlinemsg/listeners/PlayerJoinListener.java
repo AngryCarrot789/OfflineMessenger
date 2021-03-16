@@ -1,7 +1,7 @@
-package carrot.offlinemsg.listeners;
+package reghzy.offlinemsg.listeners;
 
-import carrot.offlinemsg.OfflineMessenger;
-import carrot.offlinemsg.players.MessageQueueManager;
+import reghzy.offlinemsg.OfflineMessenger;
+import reghzy.offlinemsg.players.MessageQueueManager;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

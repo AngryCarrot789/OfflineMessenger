@@ -1,10 +1,10 @@
-package carrot.offlinemsg;
+package reghzy.offlinemsg;
 
-import carrot.offlinemsg.commands.OfflineMessengerCommandHandler;
-import carrot.offlinemsg.config.Config;
-import carrot.offlinemsg.listeners.PlayerJoinListener;
-import carrot.offlinemsg.logs.ChatLogger;
-import carrot.offlinemsg.players.MessageQueueManager;
+import reghzy.offlinemsg.commands.OfflineMessengerCommandHandler;
+import reghzy.offlinemsg.config.Config;
+import reghzy.offlinemsg.listeners.PlayerJoinListener;
+import reghzy.offlinemsg.logs.ChatLogger;
+import reghzy.offlinemsg.players.MessageQueueManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -29,6 +29,7 @@ public class OfflineMessenger extends JavaPlugin {
         else {
             ChatLogger.LogPlugin("PermissionsEx Avaliable!");
         }
+
         instance = this;
         logger = new ChatLogger(null);
         ChatLogger.LogPlugin("Enabling plugin...");

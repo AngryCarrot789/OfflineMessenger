@@ -1,4 +1,4 @@
-package carrot.offlinemsg.commands;
+package reghzy.offlinemsg.commands;
 
 import java.util.ArrayList;
 import java.util.Arrays;

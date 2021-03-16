@@ -1,4 +1,4 @@
-package carrot.offlinemsg.commands;
+package reghzy.offlinemsg.commands;
 
 public class ParsedValue<T> {
     private T value;

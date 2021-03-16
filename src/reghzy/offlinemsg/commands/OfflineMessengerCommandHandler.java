@@ -1,10 +1,10 @@
-package carrot.offlinemsg.commands;
+package reghzy.offlinemsg.commands;
 
-import carrot.offlinemsg.OfflineMessenger;
-import carrot.offlinemsg.PermissionsHelper;
-import carrot.offlinemsg.logs.ChatLogger;
-import carrot.offlinemsg.players.MessageQueueManager;
-import carrot.offlinemsg.players.PlayerMessage;
+import reghzy.offlinemsg.OfflineMessenger;
+import reghzy.offlinemsg.PermissionsHelper;
+import reghzy.offlinemsg.logs.ChatLogger;
+import reghzy.offlinemsg.players.MessageQueueManager;
+import reghzy.offlinemsg.players.PlayerMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

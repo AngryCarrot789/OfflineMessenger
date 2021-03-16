@@ -1,8 +1,8 @@
-package carrot.offlinemsg.config;
+package reghzy.offlinemsg.config;
 
-import carrot.offlinemsg.OfflineMessenger;
-import carrot.offlinemsg.logs.ChatLogger;
-import carrot.offlinemsg.logs.format.ChatFormatting;
+import reghzy.offlinemsg.OfflineMessenger;
+import reghzy.offlinemsg.logs.ChatLogger;
+import reghzy.offlinemsg.logs.format.ChatFormatting;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;

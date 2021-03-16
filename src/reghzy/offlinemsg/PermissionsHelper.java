@@ -1,4 +1,4 @@
-package carrot.offlinemsg;
+package reghzy.offlinemsg;
 
 import org.bukkit.entity.Player;
 import ru.tehkode.permissions.bukkit.PermissionsEx;

@@ -1,9 +1,9 @@
-package carrot.offlinemsg.players;
+package reghzy.offlinemsg.players;
 
-import carrot.offlinemsg.OfflineMessenger;
-import carrot.offlinemsg.config.Config;
-import carrot.offlinemsg.logs.ChatLogger;
-import carrot.offlinemsg.logs.ChatMessageDelayer;
+import reghzy.offlinemsg.OfflineMessenger;
+import reghzy.offlinemsg.config.Config;
+import reghzy.offlinemsg.logs.ChatLogger;
+import reghzy.offlinemsg.logs.ChatMessageDelayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;

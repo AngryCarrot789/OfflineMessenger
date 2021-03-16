@@ -1,7 +1,7 @@
-package carrot.offlinemsg.commands;
+package reghzy.offlinemsg.commands;
 
-import carrot.offlinemsg.PermissionsHelper;
-import carrot.offlinemsg.logs.ChatLogger;
+import reghzy.offlinemsg.PermissionsHelper;
+import reghzy.offlinemsg.logs.ChatLogger;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 

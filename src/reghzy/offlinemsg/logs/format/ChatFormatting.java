@@ -1,4 +1,4 @@
-package carrot.offlinemsg.logs.format;
+package reghzy.offlinemsg.logs.format;
 
 public class ChatFormatting {
     public static String Apostrophise(String content){
